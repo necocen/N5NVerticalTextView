@@ -22,6 +22,8 @@
 		E9476F0C17E7411E00052A9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9476F0A17E7411E00052A9F /* InfoPlist.strings */; };
 		E9476F0E17E7411E00052A9F /* N5NVerticalTextViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F0D17E7411E00052A9F /* N5NVerticalTextViewTests.m */; };
 		E9476F1917E742E300052A9F /* N5NVerticalTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F1817E742E300052A9F /* N5NVerticalTextView.m */; };
+		E9476F1F17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F1C17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m */; };
+		E9476F2017E7492500052A9F /* NSString+N5NComposedCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F1E17E7492500052A9F /* NSString+N5NComposedCharacter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,10 @@
 		E9476F0D17E7411E00052A9F /* N5NVerticalTextViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = N5NVerticalTextViewTests.m; sourceTree = "<group>"; };
 		E9476F1717E742E300052A9F /* N5NVerticalTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N5NVerticalTextView.h; sourceTree = "<group>"; };
 		E9476F1817E742E300052A9F /* N5NVerticalTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N5NVerticalTextView.m; sourceTree = "<group>"; };
+		E9476F1B17E7492500052A9F /* NSMutableString+N5NComposedCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+N5NComposedCharacter.h"; sourceTree = "<group>"; };
+		E9476F1C17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+N5NComposedCharacter.m"; sourceTree = "<group>"; };
+		E9476F1D17E7492500052A9F /* NSString+N5NComposedCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+N5NComposedCharacter.h"; sourceTree = "<group>"; };
+		E9476F1E17E7492500052A9F /* NSString+N5NComposedCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+N5NComposedCharacter.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,8 +128,7 @@
 				E9476EF817E7411E00052A9F /* N5NViewController.m */,
 				E9476EFA17E7411E00052A9F /* Images.xcassets */,
 				E9476EE917E7411E00052A9F /* Supporting Files */,
-				E9476F1717E742E300052A9F /* N5NVerticalTextView.h */,
-				E9476F1817E742E300052A9F /* N5NVerticalTextView.m */,
+				E9476F1A17E748BC00052A9F /* N5NVerticalTextView */,
 			);
 			path = N5NVerticalTextView;
 			sourceTree = "<group>";
@@ -155,6 +160,19 @@
 				E9476F0A17E7411E00052A9F /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E9476F1A17E748BC00052A9F /* N5NVerticalTextView */ = {
+			isa = PBXGroup;
+			children = (
+				E9476F1B17E7492500052A9F /* NSMutableString+N5NComposedCharacter.h */,
+				E9476F1C17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m */,
+				E9476F1D17E7492500052A9F /* NSString+N5NComposedCharacter.h */,
+				E9476F1E17E7492500052A9F /* NSString+N5NComposedCharacter.m */,
+				E9476F1717E742E300052A9F /* N5NVerticalTextView.h */,
+				E9476F1817E742E300052A9F /* N5NVerticalTextView.m */,
+			);
+			path = N5NVerticalTextView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +277,8 @@
 				E9476EF317E7411E00052A9F /* N5NAppDelegate.m in Sources */,
 				E9476EEF17E7411E00052A9F /* main.m in Sources */,
 				E9476F1917E742E300052A9F /* N5NVerticalTextView.m in Sources */,
+				E9476F1F17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m in Sources */,
+				E9476F2017E7492500052A9F /* NSString+N5NComposedCharacter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +489,7 @@
 				E9476F1317E7411E00052A9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E9476F1417E7411E00052A9F /* Build configuration list for PBXNativeTarget "N5NVerticalTextViewTests" */ = {
 			isa = XCConfigurationList;
@@ -477,6 +498,7 @@
 				E9476F1617E7411E00052A9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
