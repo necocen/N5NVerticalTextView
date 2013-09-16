@@ -6,8 +6,6 @@
 //  Copyright (c) 2013年 κねこせん. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 /// Subclass of UITextPosition used to indicate a position in the text.
 @interface N5NTextPosition : UITextPosition
 

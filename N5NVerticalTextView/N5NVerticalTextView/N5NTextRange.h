@@ -6,8 +6,6 @@
 //  Copyright (c) 2013年 κねこせん. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 /// Subclass of UITextRange used to indicate a range in the text.
 @interface N5NTextRange : UITextRange
 
