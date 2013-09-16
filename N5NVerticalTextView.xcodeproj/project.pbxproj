@@ -21,6 +21,7 @@
 		E9476F0417E7411E00052A9F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9476EE617E7411E00052A9F /* UIKit.framework */; };
 		E9476F0C17E7411E00052A9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E9476F0A17E7411E00052A9F /* InfoPlist.strings */; };
 		E9476F0E17E7411E00052A9F /* N5NVerticalTextViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F0D17E7411E00052A9F /* N5NVerticalTextViewTests.m */; };
+		E9476F1917E742E300052A9F /* N5NVerticalTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F1817E742E300052A9F /* N5NVerticalTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		E9476F0917E7411E00052A9F /* N5NVerticalTextViewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "N5NVerticalTextViewTests-Info.plist"; sourceTree = "<group>"; };
 		E9476F0B17E7411E00052A9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E9476F0D17E7411E00052A9F /* N5NVerticalTextViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = N5NVerticalTextViewTests.m; sourceTree = "<group>"; };
+		E9476F1717E742E300052A9F /* N5NVerticalTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N5NVerticalTextView.h; sourceTree = "<group>"; };
+		E9476F1817E742E300052A9F /* N5NVerticalTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N5NVerticalTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,8 @@
 				E9476EF817E7411E00052A9F /* N5NViewController.m */,
 				E9476EFA17E7411E00052A9F /* Images.xcassets */,
 				E9476EE917E7411E00052A9F /* Supporting Files */,
+				E9476F1717E742E300052A9F /* N5NVerticalTextView.h */,
+				E9476F1817E742E300052A9F /* N5NVerticalTextView.m */,
 			);
 			path = N5NVerticalTextView;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 				E9476EF917E7411E00052A9F /* N5NViewController.m in Sources */,
 				E9476EF317E7411E00052A9F /* N5NAppDelegate.m in Sources */,
 				E9476EEF17E7411E00052A9F /* main.m in Sources */,
+				E9476F1917E742E300052A9F /* N5NVerticalTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +388,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "N5NVerticalTextView/N5NVerticalTextView-Prefix.pch";
 				INFOPLIST_FILE = "N5NVerticalTextView/N5NVerticalTextView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -395,6 +402,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "N5NVerticalTextView/N5NVerticalTextView-Prefix.pch";
 				INFOPLIST_FILE = "N5NVerticalTextView/N5NVerticalTextView-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
