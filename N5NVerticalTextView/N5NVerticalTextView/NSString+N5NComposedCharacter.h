@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 κねこせん. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 /**
  絵文字の使われた文字列に対応するためのカテゴリです
@@ -16,26 +16,26 @@
 /**
   結合文字を一字として扱う文字列位置を受けとって、元の文字列位置を返します
 
- @param anIndex 結合文字を一字として扱う文字列位置
+ @param composedIndex 結合文字を一字として扱う文字列位置
  @return 結合文字を展開したときの文字列位置
  */
-- (NSUInteger)N5N_decomposedIndexFromComposedIndex:(NSUInteger)anIndex;
+- (NSUInteger)N5N_decomposedIndexFromComposedIndex:(NSUInteger)composedIndex;
 
 /**
  結合文字を一字として扱う文字列範囲を受けとって、元の文字列範囲を返します
  
- @param aRange 結合文字を一字として扱う文字列範囲
+ @param composedRange 結合文字を一字として扱う文字列範囲
  @return 結合文字を展開したときの文字列範囲
  */
-- (NSRange)N5N_decomposedRangeFromComposedRange:(NSRange)aRange;
+- (NSRange)N5N_decomposedRangeFromComposedRange:(NSRange)composedRange;
 
 /**
  結合文字を一字として扱うaRangeの範囲の文字列を返します
  
- @param aRange 結合文字を一字として扱う文字列の範囲
+ @param composedRange 結合文字を一字として扱う文字列の範囲
  @return 結合文字を展開したときの文字列
  */
-- (NSString*)N5N_substringInRange:(NSRange)aRange;
+- (NSString*)N5N_substringInComposedRange:(NSRange)composedRange;
 
 /**
  結合文字を一字として扱うときの文字列の長さを返します

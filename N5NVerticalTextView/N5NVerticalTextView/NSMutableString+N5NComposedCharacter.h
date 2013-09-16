@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 κねこせん. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 /**
  絵文字の使われた文字列に対応するためのカテゴリです
@@ -16,26 +16,26 @@
 /**
  結合文字を一字として扱うaRangeの範囲の文字列をaStringで置き換えます
 
- @param aRange  結合文字を一字として扱う文字列の範囲
- @param aString 置き換える文字列
+ @param composedRange  結合文字を一字として扱う文字列の範囲
+ @param string 置き換える文字列
  */
-- (void)N5N_replaceCharactersInComposedRange:(NSRange)aRange
-                                  withString:(NSString*)aString;
+- (void)N5N_replaceCharactersInComposedRange:(NSRange)composedRange
+                                  withString:(NSString*)string;
 
 /**
  結合文字を一字として扱うanIndexの位置にaStringを挿入します
  
- @param aString 挿入する文字列
- @param anIndex 結合文字を一字として扱う文字列の位置
+ @param string 挿入する文字列
+ @param composedIndex 結合文字を一字として扱う文字列の位置
  */
-- (void)N5N_insertString:(NSString*)aString
-         atComposedIndex:(NSUInteger)anIndex;
+- (void)N5N_insertString:(NSString*)string
+         atComposedIndex:(NSUInteger)composedIndex;
 
 /**
  結合文字を一字として扱うaRangeの範囲の文字列を削除します
  
- @param aRange 結合文字を一字として扱う文字列の範囲
+ @param composedRange 結合文字を一字として扱う文字列の範囲
  */
-- (void)N5N_deleteCharactersInComposedRange:(NSRange)aRange;
+- (void)N5N_deleteCharactersInComposedRange:(NSRange)composedRange;
 
 @end

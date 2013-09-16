@@ -8,9 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+
 /**
- 縦書きのUITextView
+ UITextView for vertical writing.
  */
 @interface N5NVerticalTextView : UIScrollView
+
+/// text.
+@property (nonatomic, strong) NSString* text;
+/// attributed string.
+@property (nonatomic, strong) NSAttributedString* attributedString;
+
+// @property (nonatomic, assign) UIDataDetectorTypes dataDetectorTypes;
+
+@property (nonatomic, assign) UITextAutocapitalizationType autocapitalizationType;
+@property (nonatomic, assign)     UITextAutocorrectionType autocorrectionType;
+@property (nonatomic, assign)      UITextSpellCheckingType spellCheckingType;
+@property (nonatomic, assign)                         BOOL enablesReturnKeyAutomatically;
+@property (nonatomic, assign)         UIKeyboardAppearance keyboardAppearance;
+@property (nonatomic, assign)               UIKeyboardType keyboardType;
+@property (nonatomic, assign)              UIReturnKeyType returnKeyType;
+@property (nonatomic, assign)                         BOOL secureTextEntry;
 
 @end

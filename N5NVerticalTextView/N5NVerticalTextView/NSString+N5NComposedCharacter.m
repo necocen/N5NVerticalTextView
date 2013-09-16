@@ -22,12 +22,12 @@ static BOOL isNationalFlag(char* buffer);
 
 #pragma mark - index calculation
 
-- (NSUInteger)N5N_decomposedIndexFromComposedIndex:(NSUInteger)anIndex
+- (NSUInteger)N5N_decomposedIndexFromComposedIndex:(NSUInteger)composedIndex
 {
     NSUInteger composedLength = [self N5N_composedLength];
-    if(anIndex == 0) return 0;
-    if(anIndex > composedLength) return NSNotFound;
-    if(anIndex == composedLength) return [self length];
+    if(composedIndex == 0) return 0;
+    if(composedIndex > composedLength) return NSNotFound;
+    if(composedIndex == composedLength) return [self length];
     
     __block int location = 0;
     __block int decomposedIndex = 0;
@@ -72,7 +72,7 @@ static BOOL isNationalFlag(char* buffer);
                                   }
                               }
                               
-                              if(location == anIndex)
+                              if(location == composedIndex)
                               {
                                   if(buffer[0])
                                       decomposedIndex = substringRange.location;
@@ -80,7 +80,7 @@ static BOOL isNationalFlag(char* buffer);
                                       decomposedIndex = substringRange.location + substringRange.length;
                                   *stop = YES;
                               }
-                              else if(location > anIndex)
+                              else if(location > composedIndex)
                               {
                                   decomposedIndex = substringRange.location;
                                   *stop = YES;
@@ -92,12 +92,12 @@ static BOOL isNationalFlag(char* buffer);
     return decomposedIndex;
 }
 
-- (NSRange)N5N_decomposedRangeFromComposedRange:(NSRange)aRange
+- (NSRange)N5N_decomposedRangeFromComposedRange:(NSRange)composedRange
 {
-    NSUInteger location = [self N5N_decomposedIndexFromComposedIndex:aRange.location];
+    NSUInteger location = [self N5N_decomposedIndexFromComposedIndex:composedRange.location];
     if(location == NSNotFound) return NSMakeRange(NSNotFound, 0);
     
-    NSUInteger length = [self N5N_decomposedIndexFromComposedIndex:aRange.location + aRange.length] - location;
+    NSUInteger length = [self N5N_decomposedIndexFromComposedIndex:composedRange.location + composedRange.length] - location;
     return NSMakeRange(location, length);
 }
 
@@ -155,9 +155,9 @@ static BOOL isNationalFlag(char* buffer);
     return location;
 }
 
-- (NSString*)N5N_substringInRange:(NSRange)aRange
+- (NSString*)N5N_substringInComposedRange:(NSRange)composedRange
 {
-    return [self substringWithRange:[self N5N_decomposedRangeFromComposedRange:aRange]];
+    return [self substringWithRange:[self N5N_decomposedRangeFromComposedRange:composedRange]];
 }
 
 @end

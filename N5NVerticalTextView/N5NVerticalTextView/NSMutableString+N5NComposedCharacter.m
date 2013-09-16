@@ -13,21 +13,21 @@
 
 @implementation NSMutableString (N5NComposedCharacter)
 
-- (void)N5N_replaceCharactersInComposedRange:(NSRange)aRange
-                                  withString:(NSString*)aString
+- (void)N5N_replaceCharactersInComposedRange:(NSRange)composedRange
+                                  withString:(NSString*)string
 {
-    [self replaceCharactersInRange:[self N5N_decomposedRangeFromComposedRange:aRange] withString:aString];
+    [self replaceCharactersInRange:[self N5N_decomposedRangeFromComposedRange:composedRange] withString:string];
 }
 
-- (void)N5N_insertString:(NSString*)aString
-         atComposedIndex:(NSUInteger)anIndex
+- (void)N5N_insertString:(NSString*)string
+         atComposedIndex:(NSUInteger)composedIndex
 {
-    [self insertString:aString atIndex:[self N5N_decomposedIndexFromComposedIndex:anIndex]];
+    [self insertString:string atIndex:[self N5N_decomposedIndexFromComposedIndex:composedIndex]];
 }
 
-- (void)N5N_deleteCharactersInComposedRange:(NSRange)aRange
+- (void)N5N_deleteCharactersInComposedRange:(NSRange)composedRange
 {
-    [self deleteCharactersInRange:[self N5N_decomposedRangeFromComposedRange:aRange]];
+    [self deleteCharactersInRange:[self N5N_decomposedRangeFromComposedRange:composedRange]];
 }
 
 @end

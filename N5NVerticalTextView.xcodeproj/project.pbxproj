@@ -27,6 +27,8 @@
 		E9476F2617E74C2D00052A9F /* N5NTextPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F2517E74C2D00052A9F /* N5NTextPosition.m */; };
 		E9476F2917E74DF800052A9F /* N5NTextRange.m in Sources */ = {isa = PBXBuildFile; fileRef = E9476F2817E74DF800052A9F /* N5NTextRange.m */; };
 		E9476F2B17E753C200052A9F /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9476F2A17E753C200052A9F /* CoreText.framework */; };
+		E9796D4417E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = E9796D4317E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.m */; };
+		E9796D4717E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = E9796D4617E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,10 @@
 		E9476F2717E74DF800052A9F /* N5NTextRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N5NTextRange.h; sourceTree = "<group>"; };
 		E9476F2817E74DF800052A9F /* N5NTextRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N5NTextRange.m; sourceTree = "<group>"; };
 		E9476F2A17E753C200052A9F /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		E9796D4217E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+N5NComposedCharacter.h"; sourceTree = "<group>"; };
+		E9796D4317E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+N5NComposedCharacter.m"; sourceTree = "<group>"; };
+		E9796D4517E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+N5NComposedCharacter.h"; sourceTree = "<group>"; };
+		E9796D4617E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+N5NComposedCharacter.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +199,10 @@
 				E9476F1C17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m */,
 				E9476F1D17E7492500052A9F /* NSString+N5NComposedCharacter.h */,
 				E9476F1E17E7492500052A9F /* NSString+N5NComposedCharacter.m */,
+				E9796D4217E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.h */,
+				E9796D4317E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.m */,
+				E9796D4517E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.h */,
+				E9796D4617E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -297,8 +307,10 @@
 			files = (
 				E9476EF917E7411E00052A9F /* N5NViewController.m in Sources */,
 				E9476EF317E7411E00052A9F /* N5NAppDelegate.m in Sources */,
+				E9796D4717E77438003CC959 /* NSMutableAttributedString+N5NComposedCharacter.m in Sources */,
 				E9476EEF17E7411E00052A9F /* main.m in Sources */,
 				E9476F1917E742E300052A9F /* N5NVerticalTextView.m in Sources */,
+				E9796D4417E7711D003CC959 /* NSAttributedString+N5NComposedCharacter.m in Sources */,
 				E9476F2917E74DF800052A9F /* N5NTextRange.m in Sources */,
 				E9476F2617E74C2D00052A9F /* N5NTextPosition.m in Sources */,
 				E9476F1F17E7492500052A9F /* NSMutableString+N5NComposedCharacter.m in Sources */,
