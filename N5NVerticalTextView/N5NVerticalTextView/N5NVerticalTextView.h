@@ -12,12 +12,20 @@
 /**
  UITextView for vertical writing.
  */
-@interface N5NVerticalTextView : UIScrollView
+@interface N5NVerticalTextView : UIScrollView <UITextInput>
 
 /// text.
-@property (nonatomic, strong) NSString* text;
+@property (nonatomic, copy) NSString* text;
 /// attributed string.
-@property (nonatomic, strong) NSAttributedString* attributedString;
+@property (nonatomic, copy) NSAttributedString* attributedString;
+
+/// font.
+@property (nonatomic, strong) UIFont* font;
+
+/// editable?
+@property (nonatomic, assign) BOOL editable;
+
+/// input delegate.
 
 // @property (nonatomic, assign) UIDataDetectorTypes dataDetectorTypes;
 
