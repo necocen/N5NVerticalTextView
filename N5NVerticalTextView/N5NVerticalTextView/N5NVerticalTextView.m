@@ -140,12 +140,12 @@
 - (UITextPosition*)positionFromPosition:(UITextPosition *)position
                                  offset:(NSInteger)offset
 {
-    NSInteger end = ((N5NTextPosition*)position).index + offset;
-    if(end > [_string.string N5N_composedLength] || end < 0)
-    {
-        // TODO: NSUInteger or NSInteger?
-    }
-    return nil;
+    // WARN: ignoring out-of-bound newIndex.
+    NSInteger newIndex = ((N5NTextPosition*)position).index + offset;
+    if(newIndex > [_string.string N5N_composedLength] || newIndex < 0)
+        return nil;
+    
+    return [N5NTextPosition textPositionWithIndex:newIndex];
 }
 
 
