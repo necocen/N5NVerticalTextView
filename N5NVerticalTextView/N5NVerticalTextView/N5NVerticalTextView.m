@@ -30,17 +30,26 @@
 {
     /// input string
     NSMutableAttributedString* _string;
-    /// default attributes
-    NSDictionary* _defaultAttributes;
+    /// font
+    UIFont* _font;
+    /// color
+    UIColor* _color;
+    /// attributes(internal)
+    NSDictionary* _attributes;
     
     id<UITextInputTokenizer> _textInputTokenizer;
     id<UITextInputDelegate> _textInputDelegate;
     
     /// content view
     N5NVerticalTextContentView* _contentView;
+    
+    /// CoreText Framesetter
+    CTFramesetterRef _framesetter;
+    /// CoreText Frame
+    CTFrameRef _frame;
 }
 
-#pragma mark - Init
+#pragma mark - Init and dealloc
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -57,6 +66,12 @@
         [self N5N_commonInit];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if(_framesetter) CFRelease(_framesetter);
+    if(_frame) CFRelease(_frame);
 }
 
 #pragma mark - UIKeyInput
@@ -92,6 +107,8 @@
     
     self.selectedRange = selectedRange;
     self.markedRange = markedRange;
+    
+    [self N5N_textChanged];
 }
 
 - (void)insertText:(NSString *)text
@@ -101,21 +118,27 @@
 
     if(markedRange.location != NSNotFound) // has marked text
     {
-        [_string N5N_replaceCharactersInComposedRange:markedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_defaultAttributes]];
+        [_string N5N_replaceCharactersInComposedRange:markedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
         selectedRange.location = markedRange.location + [text N5N_composedLength];
         selectedRange.length = 0;
         markedRange = NSMakeRange(NSNotFound, 0);
     }
     else if(selectedRange.length > 0) // has non-zero selection
     {
-        [_string N5N_replaceCharactersInComposedRange:selectedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_defaultAttributes]];
+        [_string N5N_replaceCharactersInComposedRange:selectedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
         selectedRange.length = 0;
+        selectedRange.location += [text N5N_composedLength];
+    }
+    else
+    {
+        [_string N5N_insertAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes] atComposedIndex:selectedRange.location];
         selectedRange.location += [text N5N_composedLength];
     }
     self.selectedRange = selectedRange;
     self.markedRange = markedRange;
+    
+    [self N5N_textChanged];
 }
-
 
 #pragma mark - UITextInput
 - (UITextPosition*)beginningOfDocument
@@ -157,27 +180,34 @@
 
 - (void)setText:(NSString *)text
 {
-    [self.inputDelegate textWillChange:self];
+//    [self.inputDelegate textWillChange:self];
     
-    _string = [[[NSAttributedString alloc] initWithString:text attributes:_defaultAttributes] mutableCopy];
+    _string = [[[NSAttributedString alloc] initWithString:text attributes:_attributes] mutableCopy];
     [self N5N_textChanged];
     
-    [self.inputDelegate textDidChange:self];
+//    [self.inputDelegate textDidChange:self];
 }
 
-- (NSAttributedString *)attributedString
+- (UIFont*)font
 {
-    return [_string copy];
+    return _font;
 }
 
-- (void)setAttributedString:(NSAttributedString *)attributedString
+- (void)setFont:(UIFont*)font
 {
-    [self.inputDelegate textWillChange:self];
+    _font = font;
+    [self N5N_configureAttributes];
+}
 
-    _string = [attributedString mutableCopy];
-    [self N5N_textChanged];
-    
-    [self.inputDelegate textDidChange:self];
+- (UIColor*)color
+{
+    return _color;
+}
+
+- (void)setColor:(UIColor *)color
+{
+    _color = color;
+    [self N5N_configureAttributes];
 }
 
 - (void)setSelectedRange:(NSRange)selectedRange
@@ -210,6 +240,11 @@
     }
 }
 
+- (void)setContentSize:(CGSize)contentSize
+{
+    // Do nothing.
+}
+
 - (UITextRange*)markedTextRange
 {
     return [N5NTextRange textRangeWithRange:self.markedRange];
@@ -230,22 +265,23 @@
     _textInputDelegate = inputDelegate;
 }
 
-
 #pragma mark - Private
 /// Common intializer
 - (void)N5N_commonInit
 {
     _string = [[NSMutableAttributedString alloc] init];
-    _defaultAttributes = @{};
+    _font = [UIFont fontWithName:@"HiraKakuProN-W3" size:17];
+    _color = [UIColor blackColor];
+    [self N5N_configureAttributes];
     
-    self.font = [UIFont systemFontOfSize:17];
     self.editable = YES;
     
-    _textInputTokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
+//    _textInputTokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
     
     // set content view
     _contentView = [[N5NVerticalTextContentView alloc] initWithFrame:self.bounds];
     _contentView.delegate = self;
+    [self addSubview:_contentView];
     
     // tap gesture recognizer
     UITapGestureRecognizer* tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(N5N_tapGestureRecognized:)];
@@ -256,6 +292,26 @@
 /// re-draw/re-calculate the new text.
 - (void)N5N_textChanged
 {
+    if(_framesetter) CFRelease(_framesetter);
+    _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_string);
+    
+
+    CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(_contentView.frame.size.height, CGFLOAT_MAX), NULL);
+    
+    // if last letter of the string is linebreak, add additional space for ner line.
+    CGFloat lastline = 0.;
+    if([_string.string hasSuffix:@"\n"])
+        lastline = _font.lineHeight;
+    
+    _contentView.frame = CGRectMake(0, 0, textSize.height + lastline, self.bounds.size.height);
+    [super setContentSize:_contentView.bounds.size];
+    
+    UIBezierPath* path = [UIBezierPath bezierPathWithRect:CGRectMake(0.f, 0.f, _contentView.bounds.size.height, _contentView.bounds.size.width)];
+    
+    if(_frame) CFRelease(_frame);
+    _frame = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, 0), path.CGPath, NULL);
+    
+    [_contentView setNeedsDisplay];
     
 }
 
@@ -265,12 +321,35 @@
     
 }
 
+/// configure text attributes with current font and color.
+- (void)N5N_configureAttributes
+{
+    CTFontRef font = CTFontCreateWithName((CFStringRef)_font.fontName, _font.pointSize, NULL);
+    _attributes = @{
+                    (NSString*)kCTFontAttributeName: (__bridge id)font,
+                    (NSString*)kCTForegroundColorAttributeName: (__bridge id)_color.CGColor,
+                    (NSString*)kCTVerticalFormsAttributeName: @YES
+                    };
+    CFRelease(font);
+}
+
 
 #pragma mark - Drawing
 - (void)N5N_drawContentInRect:(CGRect)rect
                     inContext:(CGContextRef)context
 {
+    CGContextSaveGState(context);
+    CGContextTranslateCTM(context, 0, rect.size.height);
     
+    
+    // rotate context for vertical writing
+    CGContextRotateCTM(context, -M_PI / 2.0);
+//    CGContextTranslateCTM(context, -rect.size.width, 0);
+    
+    // draw frame
+    CTFrameDraw(_frame, context);
+    
+    CGContextRestoreGState(context);
 }
 
 

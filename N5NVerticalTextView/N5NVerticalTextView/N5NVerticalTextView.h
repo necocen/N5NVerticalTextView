@@ -12,15 +12,17 @@
 /**
  UITextView for vertical writing.
  */
-@interface N5NVerticalTextView : UIScrollView <UITextInput>
+//@interface N5NVerticalTextView : UIScrollView <UITextInput>
+@interface N5NVerticalTextView : UIScrollView <UIKeyInput>
 
 /// text.
 @property (nonatomic, copy) NSString* text;
-/// attributed string.
-@property (nonatomic, copy) NSAttributedString* attributedString;
 
 /// font.
 @property (nonatomic, strong) UIFont* font;
+
+/// text color.
+@property (nonatomic, strong) UIColor* color;
 
 /// editable?
 @property (nonatomic, assign) BOOL editable;
@@ -36,6 +38,6 @@
 @property (nonatomic, assign)         UIKeyboardAppearance keyboardAppearance;
 @property (nonatomic, assign)               UIKeyboardType keyboardType;
 @property (nonatomic, assign)              UIReturnKeyType returnKeyType;
-@property (nonatomic, assign)                         BOOL secureTextEntry;
+@property (nonatomic, assign, getter=isSecureTextEntry) BOOL secureTextEntry;
 
 @end
