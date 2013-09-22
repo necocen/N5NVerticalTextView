@@ -148,6 +148,13 @@
     return [_string.string N5N_substringInComposedRange:textRange];
 }
 
+- (void)replaceRange:(UITextRange*)range
+            withText:(NSString *)text
+{
+    NSRange textRange = ((N5NTextRange*)range).range;
+    [_string N5N_replaceCharactersInComposedRange:textRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
+}
+
 
 #pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
