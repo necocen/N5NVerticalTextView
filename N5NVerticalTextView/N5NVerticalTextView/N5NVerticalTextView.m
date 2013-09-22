@@ -140,17 +140,16 @@
     [self N5N_textChanged];
 }
 
-#pragma mark - UITextInput
-- (UITextPosition*)beginningOfDocument
+
+#pragma mark - UITextInput - Replacing and Returning Text
+- (NSString*)textInRange:(UITextRange*)range
 {
-    return [N5NTextPosition textPositionWithIndex:0];
+    NSRange textRange = ((N5NTextRange*)range).range;
+    return [_string.string N5N_substringInComposedRange:textRange];
 }
 
-- (UITextPosition*)endOfDocument
-{
-    return [N5NTextPosition textPositionWithIndex:[_string.string N5N_composedLength]];
-}
 
+#pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
                            toPosition:(UITextPosition *)toPosition
 {
@@ -197,6 +196,27 @@
     return [N5NTextPosition textPositionWithIndex:index];
 }
 
+- (UITextPosition*)beginningOfDocument
+{
+    return [N5NTextPosition textPositionWithIndex:0];
+}
+
+- (UITextPosition*)endOfDocument
+{
+    return [N5NTextPosition textPositionWithIndex:[_string.string N5N_composedLength]];
+}
+
+
+#pragma mark - UITextInput - Evaluating Text Positions
+
+
+#pragma mark - UITextInput - Determining Layout and Writing Direction
+
+
+#pragma mark - UITextInput - Geometry and Hit-Testing Methods
+
+
+#pragma mark - UITextInput - Text Input Delegate and Text Input Tokenizer
 
 #pragma mark - Property Accessors
 - (NSString *)text
