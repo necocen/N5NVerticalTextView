@@ -9,7 +9,7 @@
 #import "N5NVerticalTextView.h"
 
 #import "NSString+N5NComposedCharacter.h"
-#import "NSMutableAttributedString+N5NComposedCharacter.h"
+#import "NSMutableString+N5NComposedCharacter.h"
 
 #import "N5NVerticalTextContentView.h"
 #import "N5NTextPosition.h"
@@ -29,7 +29,7 @@
 @implementation N5NVerticalTextView
 {
     /// input string
-    NSMutableAttributedString* _string;
+    NSMutableString* _string;
     /// font
     UIFont* _font;
     /// color
@@ -118,20 +118,20 @@
 
     if(markedRange.location != NSNotFound) // has marked text
     {
-        [_string N5N_replaceCharactersInComposedRange:markedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
+        [_string N5N_replaceCharactersInComposedRange:markedRange withString:text];
         selectedRange.location = markedRange.location + [text N5N_composedLength];
         selectedRange.length = 0;
         markedRange = NSMakeRange(NSNotFound, 0);
     }
     else if(selectedRange.length > 0) // has non-zero selection
     {
-        [_string N5N_replaceCharactersInComposedRange:selectedRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
+        [_string N5N_replaceCharactersInComposedRange:selectedRange withString:text];
         selectedRange.length = 0;
         selectedRange.location += [text N5N_composedLength];
     }
     else
     {
-        [_string N5N_insertAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes] atComposedIndex:selectedRange.location];
+        [_string N5N_insertString:text atComposedIndex:selectedRange.location];
         selectedRange.location += [text N5N_composedLength];
     }
     self.selectedRange = selectedRange;
@@ -145,14 +145,14 @@
 - (NSString*)textInRange:(UITextRange*)range
 {
     NSRange textRange = ((N5NTextRange*)range).range;
-    return [_string.string N5N_substringInComposedRange:textRange];
+    return [_string N5N_substringInComposedRange:textRange];
 }
 
 - (void)replaceRange:(UITextRange*)range
             withText:(NSString *)text
 {
     NSRange textRange = ((N5NTextRange*)range).range;
-    [_string N5N_replaceCharactersInComposedRange:textRange withAttributedString:[[NSAttributedString alloc] initWithString:text attributes:_attributes]];
+    [_string N5N_replaceCharactersInComposedRange:textRange withString:text];
 }
 
 
@@ -202,7 +202,7 @@
 {
     // WARN: ignoring out-of-bound newIndex.
     NSInteger newIndex = ((N5NTextPosition*)position).index + offset;
-    if(newIndex > [_string.string N5N_composedLength] || newIndex < 0)
+    if(newIndex > [_string N5N_composedLength] || newIndex < 0)
         return nil;
     
     return [N5NTextPosition textPositionWithIndex:newIndex];
@@ -229,7 +229,7 @@
 
     // boundary case
     if(index < 0) index = 0;
-    if(index >= [_string.string N5N_composedLength]) index = [_string.string N5N_composedLength];
+    if(index >= [_string N5N_composedLength]) index = [_string N5N_composedLength];
 
     return [N5NTextPosition textPositionWithIndex:index];
 }
@@ -241,7 +241,7 @@
 
 - (UITextPosition*)endOfDocument
 {
-    return [N5NTextPosition textPositionWithIndex:[_string.string N5N_composedLength]];
+    return [N5NTextPosition textPositionWithIndex:[_string N5N_composedLength]];
 }
 
 
@@ -259,7 +259,7 @@
 #pragma mark - Property Accessors
 - (NSString *)text
 {
-    return [_string.string copy];
+    return [_string copy];
 }
 
 - (void)setText:(NSString *)text
@@ -330,7 +330,7 @@
 /// Common intializer
 - (void)N5N_commonInit
 {
-    _string = [[NSMutableAttributedString alloc] init];
+    _string = [[NSMutableString alloc] init];
     _font = [UIFont fontWithName:@"HiraKakuProN-W3" size:17];
     _color = [UIColor blackColor];
     [self N5N_configureAttributes];
@@ -353,15 +353,17 @@
 /// re-draw/re-calculate the new text.
 - (void)N5N_textChanged
 {
+    NSAttributedString* attributedString = [[NSAttributedString alloc] initWithString:_string attributes:_attributes];
+    
     if(_framesetter) CFRelease(_framesetter);
-    _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_string);
+    _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
     
 
     CGSize textSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(_contentView.frame.size.height, CGFLOAT_MAX), NULL);
     
     // if last letter of the string is linebreak, add additional space for ner line.
     CGFloat lastline = 0.;
-    if([_string.string hasSuffix:@"\n"])
+    if([_string hasSuffix:@"\n"])
         lastline = _font.lineHeight;
     
     _contentView.frame = CGRectMake(0, 0, MAX(self.bounds.size.width, textSize.height + lastline), self.bounds.size.height);
