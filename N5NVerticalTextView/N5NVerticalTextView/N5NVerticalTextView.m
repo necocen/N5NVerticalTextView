@@ -349,6 +349,34 @@
 
 
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
+- (CGRect)firstRectForRange:(NSRange)range
+{
+    NSArray* lines = (NSArray *) CTFrameGetLines(_frame);
+    NSInteger lineCount = [lines count];
+
+    for(NSInteger i = 0; i < lineCount; i++)
+    {
+        CTLineRef line = (__bridge CTLineRef)(lines[i]);
+        CFRange lineRange = CTLineGetStringRange(line);
+        
+        if(range.location >= lineRange.location && lineRange.location + lineRange.length > range.location)
+        {
+            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, range.location + range.length);
+            
+            CGFloat yStart = CTLineGetOffsetForStringIndex(line, range.location, NULL);
+            CGFloat yEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
+            
+            CGPoint lineOrigin;
+            CTFrameGetLineOrigins(_frame, CFRangeMake(i, 1), &lineOrigin);
+            CGFloat ascent, descent;
+            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+            // TODO: これはほんとうに正しいのか？
+            CGRect contentRect = CGRectMake(lineOrigin.y - ascent, lineOrigin.x - yStart, ascent + descent, yEnd - yStart);
+            return [_contentView convertRect:contentRect toView:self];
+        }
+    }
+    return CGRectZero;
+}
 
 
 #pragma mark - UITextInput - Text Input Delegate and Text Input Tokenizer
