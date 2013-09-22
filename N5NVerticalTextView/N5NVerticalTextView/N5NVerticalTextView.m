@@ -171,6 +171,32 @@
     return [N5NTextPosition textPositionWithIndex:newIndex];
 }
 
+- (UITextPosition*)positionFromPosition:(UITextPosition*)position
+                            inDirection:(UITextLayoutDirection)direction
+                                 offset:(NSInteger)offset
+{
+    NSInteger index = ((N5NTextPosition*)position).index;
+    switch(direction)
+    {
+        case UITextLayoutDirectionUp:
+            index += offset;
+            break;
+        case UITextLayoutDirectionDown:
+            index -= offset;
+            break;
+        case UITextLayoutDirectionLeft:
+        case UITextLayoutDirectionRight:
+            // TODO: support left/right offset.
+            break;
+    }
+
+    // boundary case
+    if(index < 0) index = 0;
+    if(index >= [_string.string N5N_composedLength]) index = [_string.string N5N_composedLength];
+
+    return [N5NTextPosition textPositionWithIndex:index];
+}
+
 
 #pragma mark - Property Accessors
 - (NSString *)text
