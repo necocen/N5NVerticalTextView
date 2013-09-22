@@ -219,6 +219,13 @@
     self.markedRange = markedTextRange;
 }
 
+- (void)unmarkText
+{
+    NSRange markedTextRange = self.markedRange;
+    markedTextRange.location = NSNotFound;
+    self.markedRange = markedTextRange;
+}
+
 
 #pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
