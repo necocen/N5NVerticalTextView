@@ -186,6 +186,39 @@
     // TODO: rewdraw marked text
 }
 
+- (void)setMarkedText:(NSString*)markedText
+        selectedRange:(NSRange)selectedRange
+{
+    NSRange selectedTextRange = self.selectedRange;
+    NSRange markedTextRange = self.markedRange;
+
+    if(markedTextRange.location != NSNotFound)
+    {
+        if(!markedText) markedText = @"";
+        [_string N5N_replaceCharactersInComposedRange:markedTextRange withString:markedText];
+        markedTextRange.length = markedText.length;
+    }
+    else if(selectedTextRange.length > 0)
+    {
+        [_string N5N_replaceCharactersInComposedRange:selectedTextRange withString:markedText];
+        markedTextRange.location = selectedTextRange.location;
+        markedTextRange.length = markedText.length;
+    }
+    else
+    {
+        [_string N5N_insertString:markedText atComposedIndex:selectedTextRange.location];
+        markedTextRange.location = selectedTextRange.location;
+        markedTextRange.length = markedText.length;
+    }
+
+    selectedTextRange = NSMakeRange(markedTextRange.location + selectedRange.location, selectedTextRange.length);
+    
+    [self N5N_textChanged];
+    
+    self.selectedRange = selectedTextRange;
+    self.markedRange = markedTextRange;
+}
+
 
 #pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
