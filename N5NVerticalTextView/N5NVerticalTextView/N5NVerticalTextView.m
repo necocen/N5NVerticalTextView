@@ -310,6 +310,29 @@
 
 #pragma mark - UITextInput - Determining Layout and Writing Direction
 
+- (UITextRange*)characterRangeByExtendingPosition:(UITextPosition*)position
+                                      inDirection:(UITextLayoutDirection)direction
+{
+    // TODO: たぶんこれじゃだめ（なんに使ってるのかわからないけど）
+    NSInteger index = ((N5NTextPosition*)position).index;
+    switch(direction)
+    {
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionRight:
+            if(index == 0)
+                return [N5NTextRange textRangeWithRange:NSMakeRange(0, 1)];
+            else
+                return [N5NTextRange textRangeWithRange:NSMakeRange(index - 1, 1)];
+            break;
+        case UITextLayoutDirectionDown:
+        case UITextLayoutDirectionLeft:
+            if(index == [_string N5N_composedLength] - 1)
+                return [N5NTextRange textRangeWithRange:NSMakeRange([_string N5N_composedLength] - 1, 1)];
+            else
+                return [N5NTextRange textRangeWithRange:NSMakeRange(index + 1, 1)];
+    }
+}
+
 
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
 
