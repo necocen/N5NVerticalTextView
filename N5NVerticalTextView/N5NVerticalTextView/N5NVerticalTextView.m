@@ -333,6 +333,13 @@
     }
 }
 
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition*)position
+                                              inDirection:(UITextStorageDirection)direction
+{
+    // TODO: これでいいの？
+    return UITextWritingDirectionRightToLeft;
+}
+
 
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
 
