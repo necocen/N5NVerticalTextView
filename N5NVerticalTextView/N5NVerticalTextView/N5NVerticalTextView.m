@@ -371,7 +371,7 @@
             CGFloat ascent, descent;
             CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
             // TODO: これはほんとうに正しいのか？
-            CGRect contentRect = CGRectMake(lineOrigin.y - ascent, lineOrigin.x - yStart, ascent + descent, yEnd - yStart);
+            CGRect contentRect = CGRectMake(lineOrigin.y + ascent, lineOrigin.x - yStart, ascent + descent, yEnd - yStart);
             return [_contentView convertRect:contentRect toView:self];
         }
     }
