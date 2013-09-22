@@ -31,6 +31,8 @@
 
 // @property (nonatomic, assign) UIDataDetectorTypes dataDetectorTypes;
 
+@property(nonatomic, copy) NSDictionary* markedTextStyle;
+
 @property (nonatomic, assign) UITextAutocapitalizationType autocapitalizationType;
 @property (nonatomic, assign)     UITextAutocorrectionType autocorrectionType;
 @property (nonatomic, assign)      UITextSpellCheckingType spellCheckingType;

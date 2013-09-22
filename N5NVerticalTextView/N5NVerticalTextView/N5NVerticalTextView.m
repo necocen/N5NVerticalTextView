@@ -180,6 +180,12 @@
     return [N5NTextRange textRangeWithRange:self.markedRange];
 }
 
+- (void)setMarkedTextStyle:(NSDictionary *)markedTextStyle
+{
+    _markedTextStyle = [markedTextStyle copy];
+    // TODO: rewdraw marked text
+}
+
 
 #pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
