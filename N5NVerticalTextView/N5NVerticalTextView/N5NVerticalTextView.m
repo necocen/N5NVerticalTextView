@@ -340,6 +340,13 @@
     return UITextWritingDirectionRightToLeft;
 }
 
+- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection
+                       forRange:(UITextRange*)range
+{
+    // do nothing.
+    // TODO: 必要？
+}
+
 
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
 
