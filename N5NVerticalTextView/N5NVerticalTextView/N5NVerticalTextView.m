@@ -156,6 +156,31 @@
 }
 
 
+#pragma mark - UITextInput - Working with Marked and Selected Text
+- (UITextRange*)selectedTextRange
+{
+    UITextRange* textRange;
+    @synchronized(self) /// atomic property.
+    {
+        textRange = [N5NTextRange textRangeWithRange:self.selectedRange];
+    }
+    return textRange;
+}
+
+- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
+{
+    @synchronized(self) /// atomic property.
+    {
+        self.selectedRange = ((N5NTextRange*)selectedTextRange).range;
+    }
+}
+
+- (UITextRange*)markedTextRange
+{
+    return [N5NTextRange textRangeWithRange:self.markedRange];
+}
+
+
 #pragma mark - UITextInput - Computing Text Ranges and Text Positions
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
                            toPosition:(UITextPosition *)toPosition
@@ -275,32 +300,9 @@
     [self N5N_selectionChanged];
 }
 
-- (UITextRange*)selectedTextRange
-{
-    UITextRange* textRange;
-    @synchronized(self) /// atomic property.
-    {
-        textRange = [N5NTextRange textRangeWithRange:self.selectedRange];
-    }
-    return textRange;
-}
-
-- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
-{
-    @synchronized(self) /// atomic property.
-    {
-        self.selectedRange = ((N5NTextRange*)selectedTextRange).range;
-    }
-}
-
 - (void)setContentSize:(CGSize)contentSize
 {
     // Do nothing.
-}
-
-- (UITextRange*)markedTextRange
-{
-    return [N5NTextRange textRangeWithRange:self.markedRange];
 }
 
 - (id<UITextInputTokenizer>)tokenizer
