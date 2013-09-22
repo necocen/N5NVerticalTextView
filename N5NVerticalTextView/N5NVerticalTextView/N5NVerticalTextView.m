@@ -303,7 +303,7 @@
     if([_string.string hasSuffix:@"\n"])
         lastline = _font.lineHeight;
     
-    _contentView.frame = CGRectMake(0, 0, textSize.height + lastline, self.bounds.size.height);
+    _contentView.frame = CGRectMake(0, 0, MAX(self.bounds.size.width, textSize.height + lastline), self.bounds.size.height);
     [super setContentSize:_contentView.bounds.size];
     
     UIBezierPath* path = [UIBezierPath bezierPathWithRect:CGRectMake(0.f, 0.f, _contentView.bounds.size.height, _contentView.bounds.size.width)];
@@ -344,7 +344,6 @@
     
     // rotate context for vertical writing
     CGContextRotateCTM(context, -M_PI / 2.0);
-//    CGContextTranslateCTM(context, -rect.size.width, 0);
     
     // draw frame
     CTFrameDraw(_frame, context);
