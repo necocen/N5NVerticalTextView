@@ -299,6 +299,14 @@
     return NSOrderedSame;
 }
 
+- (NSInteger)offsetFromPosition:(UITextPosition*)fromPosition
+                     toPosition:(UITextPosition*)toPosition
+{
+    NSInteger fromIndex = ((N5NTextPosition*)fromPosition).index;
+    NSInteger toIndex = ((N5NTextPosition*)toPosition).index;
+    return (toIndex - fromIndex);
+}
+
 
 #pragma mark - UITextInput - Determining Layout and Writing Direction
 
