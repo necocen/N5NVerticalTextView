@@ -286,6 +286,18 @@
 
 
 #pragma mark - UITextInput - Evaluating Text Positions
+- (NSComparisonResult)comparePosition:(UITextPosition*)position
+                           toPosition:(UITextPosition*)other
+{
+    NSUInteger index = ((N5NTextPosition*)position).index;
+    NSUInteger otherIndex = ((N5NTextPosition*)other).index;
+    
+    if(index < otherIndex)
+        return NSOrderedAscending;
+    else if(index > otherIndex)
+        return NSOrderedDescending;
+    return NSOrderedSame;
+}
 
 
 #pragma mark - UITextInput - Determining Layout and Writing Direction
