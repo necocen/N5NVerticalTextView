@@ -16,16 +16,16 @@
 @interface N5NVerticalTextView : UIScrollView <UIKeyInput>
 
 /// text.
-@property (nonatomic, copy) NSString* text;
+@property(nonatomic, copy) NSString* text;
 
 /// font.
-@property (nonatomic, strong) UIFont* font;
+@property(nonatomic, strong) UIFont* font;
 
 /// text color.
-@property (nonatomic, strong) UIColor* color;
+@property(nonatomic, strong) UIColor* color;
 
 /// editable?
-@property (nonatomic, assign) BOOL editable;
+@property(nonatomic, assign) BOOL editable;
 
 /// input delegate.
 
@@ -33,13 +33,13 @@
 
 @property(nonatomic, copy) NSDictionary* markedTextStyle;
 
-@property (nonatomic, assign) UITextAutocapitalizationType autocapitalizationType;
-@property (nonatomic, assign)     UITextAutocorrectionType autocorrectionType;
-@property (nonatomic, assign)      UITextSpellCheckingType spellCheckingType;
-@property (nonatomic, assign)                         BOOL enablesReturnKeyAutomatically;
-@property (nonatomic, assign)         UIKeyboardAppearance keyboardAppearance;
-@property (nonatomic, assign)               UIKeyboardType keyboardType;
-@property (nonatomic, assign)              UIReturnKeyType returnKeyType;
-@property (nonatomic, assign, getter=isSecureTextEntry) BOOL secureTextEntry;
+@property(nonatomic, assign) UITextAutocapitalizationType autocapitalizationType;
+@property(nonatomic, assign)     UITextAutocorrectionType autocorrectionType;
+@property(nonatomic, assign)      UITextSpellCheckingType spellCheckingType;
+@property(nonatomic, assign)                         BOOL enablesReturnKeyAutomatically;
+@property(nonatomic, assign)         UIKeyboardAppearance keyboardAppearance;
+@property(nonatomic, assign)               UIKeyboardType keyboardType;
+@property(nonatomic, assign)              UIReturnKeyType returnKeyType;
+@property(nonatomic, assign, getter=isSecureTextEntry) BOOL secureTextEntry;
 
 @end

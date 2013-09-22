@@ -20,9 +20,9 @@
 @interface N5NVerticalTextView () <UITextInputTraits, N5NVerticalTextContentViewDelegate>
 
 /// Text range for selection.
-@property (nonatomic, assign) NSRange selectedRange;
+@property(nonatomic, assign) NSRange selectedRange;
 /// Text range for mark.
-@property (nonatomic, assign) NSRange markedRange;
+@property(nonatomic, assign) NSRange markedRange;
 
 @end
 
