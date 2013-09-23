@@ -379,7 +379,7 @@ static const CGFloat kCaretThickness = 3;
             return [_contentView convertRect:contentRect toView:self];
         }
     }
-    return CGRectZero;
+    return CGRectNull;
 }
 
 - (CGRect)caretRectForPosition:(UITextPosition*)position
