@@ -351,7 +351,7 @@
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
 - (CGRect)firstRectForRange:(UITextRange*)range
 {
-    NSRange textRange = ((N5NTextRange*)range).range;
+    NSRange decomposedRange = [_string N5N_decomposedRangeFromComposedRange:((N5NTextRange*)range).range];
     NSArray* lines = (NSArray *) CTFrameGetLines(_frame);
     NSInteger lineCount = [lines count];
 
@@ -360,11 +360,11 @@
         CTLineRef line = (__bridge CTLineRef)(lines[i]);
         CFRange lineRange = CTLineGetStringRange(line);
         
-        if(textRange.location >= lineRange.location && lineRange.location + lineRange.length > textRange.location)
+        if(decomposedRange.location >= lineRange.location && lineRange.location + lineRange.length > decomposedRange.location)
         {
-            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, textRange.location + textRange.length);
+            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, decomposedRange.location + decomposedRange.length);
             
-            CGFloat yStart = CTLineGetOffsetForStringIndex(line, textRange.location, NULL);
+            CGFloat yStart = CTLineGetOffsetForStringIndex(line, decomposedRange.location, NULL);
             CGFloat yEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
             
             CGPoint lineOrigin;
