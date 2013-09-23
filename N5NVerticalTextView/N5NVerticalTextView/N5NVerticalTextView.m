@@ -17,6 +17,9 @@
 
 #import <CoreText/CoreText.h>
 
+/// キャレットの太さ
+static const CGFloat kCaretThickness = 3;
+
 @interface N5NVerticalTextView () <UITextInputTraits, N5NVerticalTextContentViewDelegate>
 
 /// Text range for selection.
@@ -377,6 +380,53 @@
         }
     }
     return CGRectZero;
+}
+
+- (CGRect)caretRectForPosition:(UITextPosition*)position
+{
+    NSUInteger decomposedIndex = [_string N5N_decomposedIndexFromComposedIndex:((N5NTextPosition*)position).index];
+    if([_string N5N_composedLength] == 0 || decomposedIndex == 0)
+    {
+        CGPoint origin = CGPointMake(CGRectGetMaxX(_contentView.bounds) - _font.leading, CGRectGetMinY(_contentView.bounds));
+        return CGRectMake(origin.x, origin.y, _font.ascender + fabs(_font.descender), kCaretThickness);
+    }
+    
+    NSArray* lines = (NSArray *) CTFrameGetLines(_frame);
+    NSInteger lineCount = [lines count];
+    
+    if(decomposedIndex == [_string length] && [_string characterAtIndex:decomposedIndex - 1] == '\n') // at the new line
+    {
+        CTLineRef line = (__bridge CTLineRef)lines[lineCount - 1];
+        CFRange lineRange = CTLineGetStringRange(line);
+        CGFloat yPos = CTLineGetOffsetForStringIndex(line, lineRange.location, NULL);
+        CGFloat ascent, descent;
+        CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+        CGPoint origin;
+        CTFrameGetLineOrigins(_frame, CFRangeMake(lineCount - 1, 1), &origin);
+        origin.y -= _font.leading;
+        
+        // こっちは変換しなくていいの？
+        // 自信がない計算
+        return CGRectMake(_contentView.bounds.size.width - (origin.y + descent), _contentView.bounds.size.height - (origin.x + yPos), ascent + descent, kCaretThickness);
+    }
+
+    for(int i = 0; i < lineCount; i++)
+    {
+        CTLineRef line = (__bridge CTLineRef)lines[i];
+        CFRange lineRange = CTLineGetStringRange(line);
+        if(lineRange.location <= decomposedIndex && decomposedIndex <= lineRange.location + lineRange.length)
+        {
+            CGFloat yPos = CTLineGetOffsetForStringIndex(line, decomposedIndex, NULL);
+            CGFloat ascent, descent;
+            CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+            CGPoint origin;
+            CTFrameGetLineOrigins(_frame, CFRangeMake(i, 1), &origin);
+            
+            return CGRectMake(origin.y - descent, yPos, ascent + descent, kCaretThickness);
+        }
+    }
+    
+    return CGRectNull;
 }
 
 
