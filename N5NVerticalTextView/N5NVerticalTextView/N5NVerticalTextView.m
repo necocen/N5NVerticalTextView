@@ -8,9 +8,6 @@
 
 #import "N5NVerticalTextView.h"
 
-#import "NSString+N5NComposedCharacter.h"
-#import "NSMutableString+N5NComposedCharacter.h"
-
 #import "N5NVerticalTextContentView.h"
 #import "N5NTextPosition.h"
 #import "N5NTextRange.h"
@@ -90,21 +87,22 @@ static const CGFloat kCaretThickness = 3;
     
     if(markedRange.location != NSNotFound) // has marked text.
     {
-        [_string N5N_deleteCharactersInComposedRange:markedRange];
+        [_string deleteCharactersInRange:markedRange];
         selectedRange.location = markedRange.location;
         selectedRange.length = 0;
         markedRange = NSMakeRange(NSNotFound, 0);
     }
     else if(selectedRange.length > 0) // has non-zero selection
     {
-        [_string N5N_deleteCharactersInComposedRange:selectedRange];
+        [_string deleteCharactersInRange:selectedRange];
         selectedRange.length = 0;
     }
     else if(selectedRange.location > 0) // has zero selection(caret)
     {
         selectedRange.location--;
+        // TODO: length may be greater than 1 (for composed characters)
         selectedRange.length = 1;
-        [_string N5N_deleteCharactersInComposedRange:selectedRange];
+        [_string deleteCharactersInRange:selectedRange];
         selectedRange.length = 0;
     }
     
@@ -121,21 +119,21 @@ static const CGFloat kCaretThickness = 3;
 
     if(markedRange.location != NSNotFound) // has marked text
     {
-        [_string N5N_replaceCharactersInComposedRange:markedRange withString:text];
-        selectedRange.location = markedRange.location + [text N5N_composedLength];
+        [_string replaceCharactersInRange:markedRange withString:text];
+        selectedRange.location = markedRange.location + text.length;
         selectedRange.length = 0;
         markedRange = NSMakeRange(NSNotFound, 0);
     }
     else if(selectedRange.length > 0) // has non-zero selection
     {
-        [_string N5N_replaceCharactersInComposedRange:selectedRange withString:text];
+        [_string replaceCharactersInRange:selectedRange withString:text];
         selectedRange.length = 0;
-        selectedRange.location += [text N5N_composedLength];
+        selectedRange.location += text.length;
     }
     else
     {
-        [_string N5N_insertString:text atComposedIndex:selectedRange.location];
-        selectedRange.location += [text N5N_composedLength];
+        [_string insertString:text atIndex:selectedRange.location];
+        selectedRange.location += text.length;
     }
     self.selectedRange = selectedRange;
     self.markedRange = markedRange;
@@ -148,14 +146,14 @@ static const CGFloat kCaretThickness = 3;
 - (NSString*)textInRange:(UITextRange*)range
 {
     NSRange textRange = ((N5NTextRange*)range).range;
-    return [_string N5N_substringInComposedRange:textRange];
+    return [_string substringWithRange:textRange];
 }
 
 - (void)replaceRange:(UITextRange*)range
             withText:(NSString *)text
 {
     NSRange textRange = ((N5NTextRange*)range).range;
-    [_string N5N_replaceCharactersInComposedRange:textRange withString:text];
+    [_string replaceCharactersInRange:textRange withString:text];
 }
 
 
@@ -198,18 +196,18 @@ static const CGFloat kCaretThickness = 3;
     if(markedTextRange.location != NSNotFound)
     {
         if(!markedText) markedText = @"";
-        [_string N5N_replaceCharactersInComposedRange:markedTextRange withString:markedText];
+        [_string replaceCharactersInRange:markedTextRange withString:markedText];
         markedTextRange.length = markedText.length;
     }
     else if(selectedTextRange.length > 0)
     {
-        [_string N5N_replaceCharactersInComposedRange:selectedTextRange withString:markedText];
+        [_string replaceCharactersInRange:selectedTextRange withString:markedText];
         markedTextRange.location = selectedTextRange.location;
         markedTextRange.length = markedText.length;
     }
     else
     {
-        [_string N5N_insertString:markedText atComposedIndex:selectedTextRange.location];
+        [_string insertString:markedText atIndex:selectedTextRange.location];
         markedTextRange.location = selectedTextRange.location;
         markedTextRange.length = markedText.length;
     }
@@ -245,7 +243,7 @@ static const CGFloat kCaretThickness = 3;
 {
     // WARN: ignoring out-of-bound newIndex.
     NSInteger newIndex = ((N5NTextPosition*)position).index + offset;
-    if(newIndex > [_string N5N_composedLength] || newIndex < 0)
+    if(newIndex > _string.length || newIndex < 0)
         return nil;
     
     return [N5NTextPosition textPositionWithIndex:newIndex];
@@ -272,7 +270,7 @@ static const CGFloat kCaretThickness = 3;
 
     // boundary case
     if(index < 0) index = 0;
-    if(index >= [_string N5N_composedLength]) index = [_string N5N_composedLength];
+    if(index >= _string.length) index = _string.length;
 
     return [N5NTextPosition textPositionWithIndex:index];
 }
@@ -284,7 +282,7 @@ static const CGFloat kCaretThickness = 3;
 
 - (UITextPosition*)endOfDocument
 {
-    return [N5NTextPosition textPositionWithIndex:[_string N5N_composedLength]];
+    return [N5NTextPosition textPositionWithIndex:_string.length];
 }
 
 
@@ -329,8 +327,8 @@ static const CGFloat kCaretThickness = 3;
             break;
         case UITextLayoutDirectionDown:
         case UITextLayoutDirectionLeft:
-            if(index == [_string N5N_composedLength] - 1)
-                return [N5NTextRange textRangeWithRange:NSMakeRange([_string N5N_composedLength] - 1, 1)];
+            if(index == _string.length - 1)
+                return [N5NTextRange textRangeWithRange:NSMakeRange(_string.length - 1, 1)];
             else
                 return [N5NTextRange textRangeWithRange:NSMakeRange(index + 1, 1)];
     }
@@ -352,9 +350,9 @@ static const CGFloat kCaretThickness = 3;
 
 
 #pragma mark - UITextInput - Geometry and Hit-Testing Methods
-- (CGRect)firstRectForRange:(UITextRange*)range
+- (CGRect)firstRectForRange:(UITextRange*)textRange
 {
-    NSRange decomposedRange = [_string N5N_decomposedRangeFromComposedRange:((N5NTextRange*)range).range];
+    NSRange range = ((N5NTextRange*)textRange).range;
     NSArray* lines = (NSArray *) CTFrameGetLines(_frame);
     NSInteger lineCount = [lines count];
 
@@ -363,11 +361,11 @@ static const CGFloat kCaretThickness = 3;
         CTLineRef line = (__bridge CTLineRef)(lines[i]);
         CFRange lineRange = CTLineGetStringRange(line);
         
-        if(decomposedRange.location >= lineRange.location && lineRange.location + lineRange.length > decomposedRange.location)
+        if(range.location >= lineRange.location && lineRange.location + lineRange.length > range.location)
         {
-            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, decomposedRange.location + decomposedRange.length);
+            NSInteger finalIndex = MIN(lineRange.location + lineRange.length, range.location + range.length);
             
-            CGFloat yStart = CTLineGetOffsetForStringIndex(line, decomposedRange.location, NULL);
+            CGFloat yStart = CTLineGetOffsetForStringIndex(line, range.location, NULL);
             CGFloat yEnd = CTLineGetOffsetForStringIndex(line, finalIndex, NULL);
             
             CGPoint lineOrigin;
@@ -384,8 +382,8 @@ static const CGFloat kCaretThickness = 3;
 
 - (CGRect)caretRectForPosition:(UITextPosition*)position
 {
-    NSUInteger decomposedIndex = [_string N5N_decomposedIndexFromComposedIndex:((N5NTextPosition*)position).index];
-    if([_string N5N_composedLength] == 0 || decomposedIndex == 0)
+    NSUInteger index = ((N5NTextPosition*)position).index;
+    if(_string.length == 0 || index == 0)
     {
         CGPoint origin = CGPointMake(CGRectGetMaxX(_contentView.bounds) - _font.leading, CGRectGetMinY(_contentView.bounds));
         return CGRectMake(origin.x, origin.y, _font.ascender + fabs(_font.descender), kCaretThickness);
@@ -394,7 +392,7 @@ static const CGFloat kCaretThickness = 3;
     NSArray* lines = (NSArray *) CTFrameGetLines(_frame);
     NSInteger lineCount = [lines count];
     
-    if(decomposedIndex == [_string length] && [_string characterAtIndex:decomposedIndex - 1] == '\n') // at the new line
+    if(index == [_string length] && [_string characterAtIndex:index - 1] == '\n') // at the new line
     {
         CTLineRef line = (__bridge CTLineRef)lines[lineCount - 1];
         CFRange lineRange = CTLineGetStringRange(line);
@@ -414,9 +412,9 @@ static const CGFloat kCaretThickness = 3;
     {
         CTLineRef line = (__bridge CTLineRef)lines[i];
         CFRange lineRange = CTLineGetStringRange(line);
-        if(lineRange.location <= decomposedIndex && decomposedIndex <= lineRange.location + lineRange.length)
+        if(lineRange.location <= index && index <= lineRange.location + lineRange.length)
         {
-            CGFloat yPos = CTLineGetOffsetForStringIndex(line, decomposedIndex, NULL);
+            CGFloat yPos = CTLineGetOffsetForStringIndex(line, index, NULL);
             CGFloat ascent, descent;
             CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
             CGPoint origin;
